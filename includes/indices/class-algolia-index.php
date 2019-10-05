@@ -1,7 +1,8 @@
 <?php
 
-use AlgoliaSearch\Client;
-use AlgoliaSearch\Index;
+use Algolia\AlgoliaSearch\SearchClient;
+use Algolia\AlgoliaSearch\SearchIndex;
+use Algolia\AlgoliaSearch\Exceptions\AlgoliaException;
 
 abstract class Algolia_Index {
 
