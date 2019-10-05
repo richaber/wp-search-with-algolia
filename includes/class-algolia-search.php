@@ -1,5 +1,7 @@
 <?php
 
+use Algolia\AlgoliaSearch\Exceptions\AlgoliaException;
+
 class Algolia_Search {
 
 	/**
@@ -64,7 +66,7 @@ class Algolia_Search {
 
 		try {
 			$results = $this->index->search( $query->query['s'], $params, $order_by, $order );
-		} catch ( \AlgoliaSearch\AlgoliaException $exception ) {
+		} catch ( AlgoliaException $exception ) {
 			error_log( $exception->getMessage() );
 
 			return;
