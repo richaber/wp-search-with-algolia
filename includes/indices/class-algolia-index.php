@@ -7,7 +7,7 @@ use Algolia\AlgoliaSearch\Exceptions\AlgoliaException;
 abstract class Algolia_Index {
 
 	/**
-	 * @var Client
+	 * @var SearchClient
 	 */
 	private $client;
 
@@ -63,14 +63,14 @@ abstract class Algolia_Index {
 	}
 
 	/**
-	 * @param Client $client
+	 * @param SearchClient $client
 	 */
-	final public function set_client( Client $client ) {
+	final public function set_client( SearchClient $client ) {
 		$this->client = $client;
 	}
 
 	/**
-	 * @return Client
+	 * @return SearchClient
 	 */
 	final protected function get_client() {
 		if ( null === $this->client ) {
@@ -198,7 +198,7 @@ abstract class Algolia_Index {
 	}
 
 	/**
-	 * @return Index
+	 * @return SearchIndex
 	 */
 	public function get_index() {
 		return $this->client->initIndex( (string) $this->get_name() );
@@ -272,7 +272,7 @@ abstract class Algolia_Index {
 		try {
 			$index->getSettings();
 			$index_exists = true;
-		} catch ( \AlgoliaSearch\AlgoliaException $exception ) {
+		} catch ( AlgoliaException $exception ) {
 			$index_exists = false;
 		}
 
@@ -487,12 +487,12 @@ abstract class Algolia_Index {
 	 * false otherwise.
 	 *
 	 * @return bool
-	 * @throws \AlgoliaSearch\AlgoliaException
+	 * @throws AlgoliaException
 	 */
 	public function exists() {
 		try {
 			$this->get_index()->getSettings();
-		} catch ( \AlgoliaSearch\AlgoliaException $exception ) {
+		} catch ( AlgoliaException $exception ) {
 			if ( $exception->getMessage() === 'Index does not exist' ) {
 				return false;
 			}
