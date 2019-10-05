@@ -194,7 +194,7 @@ abstract class Algolia_Index {
 
 		$index   = $this->get_index();
 		$records = $this->sanitize_json_data( $records );
-		$index->addObjects( $records );
+		$index->saveObjects( $records );
 	}
 
 	/**
@@ -258,7 +258,7 @@ abstract class Algolia_Index {
 
 			$records = $this->sanitize_json_data( $records );
 
-			$index->addObjects( $records );
+			$index->saveObjects( $records );
 		}
 
 		if ( $page === $max_num_pages ) {
@@ -279,7 +279,7 @@ abstract class Algolia_Index {
 		if ( true === $index_exists ) {
 
 			if ( true === $clear_if_existing ) {
-				$index->clearIndex();
+				$index->clearObjects();
 			}
 
 			$force_settings_update = (bool) apply_filters( 'algolia_should_force_settings_update', false, $this->get_id() );
@@ -306,7 +306,7 @@ abstract class Algolia_Index {
 		// Push synonyms.
 		$synonyms = $this->get_synonyms();
 		if ( ! empty( $synonyms ) ) {
-			$index->batchSynonyms( $synonyms );
+			$index->saveSynonyms( $synonyms );
 		}
 
 		$this->sync_replicas();
@@ -354,8 +354,15 @@ abstract class Algolia_Index {
 	}
 
 	public function de_index_items() {
-		$index_name = $this->get_name();
-		$this->client->deleteIndex( $index_name );
+		/*
+		 * The search index.
+		 *
+		 * @var SearchIndex $index
+		 */
+		$index = $this->get_index();
+
+		// Delete.
+		$index->delete();
 
 		do_action( 'algolia_de_indexed_items', $this->get_id() );
 	}
@@ -506,7 +513,7 @@ abstract class Algolia_Index {
 	}
 
 	public function clear() {
-		$this->get_index()->clearIndex();
+		$this->get_index()->clearObjects();
 	}
 
 }
