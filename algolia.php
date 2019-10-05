@@ -59,11 +59,19 @@ function algolia_load_textdomain() {
 
 add_action( 'init', 'algolia_load_textdomain' );
 
-require_once ALGOLIA_PATH . 'classmap.php';
+// Full path to the Composer generated autoloader.
+$algolia_autoloader = __DIR__ . '/vendor/autoload.php';
+
+// Return if the autoloader is not readable.
+if ( ! is_readable( $algolia_autoloader ) ) {
+	return;
+}
+
+// Require the autoloader.
+require $algolia_autoloader;
 
 $algolia = Algolia_Plugin::get_instance();
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
-	include ALGOLIA_PATH . '/includes/class-algolia-cli.php';
 	WP_CLI::add_command( 'algolia', new Algolia_CLI() );
 }
